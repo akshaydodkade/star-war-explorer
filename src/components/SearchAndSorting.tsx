@@ -6,13 +6,9 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   display: none;
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-
   @media (min-width: 769px) {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 1rem;
   }
