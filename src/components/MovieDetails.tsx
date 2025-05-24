@@ -68,7 +68,7 @@ const BottomSection = styled.div`
   flex-direction: column;
 
   h4 {
-    margin: 0 0 0.5rem;
+    margin: 1rem 0 0.5rem;
     font-size: 1.2rem;
     color: #333;
   }
