@@ -86,9 +86,6 @@ const MoviesList = () => {
 
       return a.episode_id - b.episode_id;
     });
-  
-  console.log('sorted -->');
-  console.log(sorted);
     
   return (
     <ListWrapper>
