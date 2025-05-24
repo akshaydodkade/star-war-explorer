@@ -1,46 +1,45 @@
-# Getting Started with Create React App
+# Star Wars Movies Explorer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive React + Redux + TypeScript web app that lists and explores Star Wars movies using the [SWAPI](https://swapi.dev/) and [OMDb](https://www.omdbapi.com/) APIs.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Live Demo
 
-### `npm start`
+👉 [Star Wars Explorer - View Live on Netlify](https://star-war-explorer.netlify.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+- React + TypeScript
+- Redux Toolkit
+- Styled Components
+- Jest + React Testing Library
+- SWAPI & OMDb APIs
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- List of all Star Wars films with filters and sorting
+- Detail view with movie metadata
+- Poster + IMDb/RT/Metacritic ratings via OMDb
+- Responsive layout with custom styling
+- Graceful fallback UI and poster handling
+- Full error handling and clean state management
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
 
-### `npm run eject`
+```bash
+# Clone repo
+git clone https://github.com/akshaydodkade/star-war-explorer.git
+cd star-wars-app
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Install dependencies
+yarn install
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Start development server
+yarn start
