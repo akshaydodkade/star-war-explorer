@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from '../redux/store';
 import styled from 'styled-components';
 import { getMovies, selectMovie } from '../redux/movieSlice';
 import { format } from 'date-fns';
+import { getAverageRatingFromOMDbData } from '../utils/ratings';
 
 const ListWrapper = styled.div`
   flex: 1;
@@ -60,7 +61,7 @@ const NoResultsMessage = styled.p`
 
 const MoviesList = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { movies, search, sortBy, selectedMovie } = useSelector((state: RootState) => state.movies);
+  const { movies, search, sortBy, selectedMovie, omdbDataMap } = useSelector((state: RootState) => state.movies);
 
   useEffect(() => {
     dispatch(getMovies());
@@ -72,6 +73,17 @@ const MoviesList = () => {
       if (sortBy === 'year') {
         return new Date(a.release_date).getTime() - new Date(b.release_date).getTime();
       }
+
+      if (sortBy === 'rating') {
+        const aRating = getAverageRatingFromOMDbData(omdbDataMap[a.title]);
+        const bRating = getAverageRatingFromOMDbData(omdbDataMap[b.title]);
+
+        const aScore = aRating === 'N/A' ? -1 : aRating;
+        const bScore = bRating === 'N/A' ? -1 : bRating;
+
+        return bScore - aScore;
+      }
+
       return a.episode_id - b.episode_id;
     });
     

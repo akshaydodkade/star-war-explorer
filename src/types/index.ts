@@ -5,6 +5,7 @@ export interface Movie {
   director: string;
   producer: string;
   opening_crawl: string;
+  averageRating?: number | null;
 }
 
 export interface OMDbData {

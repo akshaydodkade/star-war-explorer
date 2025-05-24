@@ -95,7 +95,9 @@ const RatingList = styled.ul`
 `;
 
 const MovieDetails = () => {
-  const { selectedMovie, omdbData } = useSelector((state: RootState) => state.movies);
+  const { selectedMovie, omdbDataMap } = useSelector((state: RootState) => state.movies);
+  const omdbData = selectedMovie ? omdbDataMap[selectedMovie.title] : null;
+
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {

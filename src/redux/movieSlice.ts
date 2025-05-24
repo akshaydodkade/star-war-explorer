@@ -5,7 +5,7 @@ import { Movie, OMDbData } from '../types';
 interface MovieState {
   movies: Movie[];
   selectedMovie: Movie | null;
-  omdbData: OMDbData | null;
+  omdbDataMap: { [title: string]: OMDbData };
   search: string;
   sortBy: 'year' | 'episode' | 'rating';
   status: 'idle' | 'loading' | 'failed';
@@ -14,16 +14,23 @@ interface MovieState {
 const initialState: MovieState = {
   movies: [],
   selectedMovie: null,
-  omdbData: null,
+  omdbDataMap: {},
   search: '',
   sortBy: 'episode',
   status: 'idle',
-}
+};
 
-export const getMovies = createAsyncThunk('movies/get', async () => {
+export const getMovies = createAsyncThunk('movies/get', async (_, { dispatch }) => {
   const response = await fetchMovies();
-  return response?.data?.results;
-})
+  const movies = response?.data?.results || [];
+
+  for (const movie of movies) {
+    dispatch(getOMDbData(movie.title));
+  }
+
+  return movies;
+});
+
 
 export const getOMDbData = createAsyncThunk('movies/omdb', async (title: string) => {
   const response = await fetchOMDbData(title);
@@ -51,8 +58,9 @@ const moviesSlice = createSlice({
         state.status = 'idle';
       })
       .addCase(getOMDbData.fulfilled, (state, action) => {
-        state.omdbData = action.payload;
-      })
+        const title = action.meta.arg;
+        state.omdbDataMap[title] = action.payload;
+      });
   },
 });
 
