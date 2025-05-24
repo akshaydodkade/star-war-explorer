@@ -14,6 +14,11 @@ const DetailWrapper = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 768px) {
+    max-height: none;
+    overflow-y: visible;
+  }
 `;
 
 const TopSection = styled.div`

@@ -27,6 +27,7 @@ const Container = styled.div`
 const AppTitle = styled.h1`
   font-weight: 400;
   text-align: center;
+  font-size: 2rem;
 `;
 
 const FlexLayout = styled.div`
