@@ -14,7 +14,6 @@ const DetailWrapper = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 `;
 
 const TopSection = styled.div`
@@ -35,11 +34,19 @@ const MovieInfo = styled.div`
   flex-direction: column;
 
   h2 {
-    margin-top: 0;
+    margin: 0 0 1rem;
+    font-size: 1.6rem;
+    color: #222;
   }
 
   p {
-    line-height: 1.4;
+    line-height: 1.5;
+    margin: 0.3rem 0;
+    color: #444;
+  }
+
+  strong {
+    color: #222;
   }
 `;
 
@@ -49,6 +56,7 @@ const Poster = styled.img`
   object-fit: contain;
   border-radius: 6px;
   align-self: flex-start;
+  border: 1px solid #ccc;
 
   @media (max-width: 768px) {
     align-self: center;
@@ -60,21 +68,29 @@ const BottomSection = styled.div`
   flex-direction: column;
 
   h4 {
-    margin: 0;
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    color: #333;
   }
 
   p {
-    margin: 0.25rem 0;
+    margin: 0.5rem 0;
+    color: #555;
   }
 `;
 
 const RatingList = styled.ul`
   padding: 0;
-  margin: 0;
+  margin: 0 0 0.5rem;
   list-style-type: none;
 
   li {
     margin: 0.3rem 0;
+    color: #555;
+  }
+
+  span {
+    font-weight: bold;
   }
 `;
 
@@ -90,71 +106,63 @@ const MovieDetails = () => {
 
   const getAverageRating = () => {
     if (!omdbData?.Ratings?.length) return 'N/A';
-  
+
     const normalizedRatings = omdbData.Ratings.map((r) => {
       const value = r.Value.trim();
-  
-      if (/^\d+(\.\d+)?\/10$/.test(value)) {
-        // IMDb format e.g. "7.8/10"
-        return parseFloat(value.split('/')[0]) * 10;
-      }
-  
-      if (/^\d+\/100$/.test(value)) {
-        // Metacritic format e.g. "58/100"
-        return parseFloat(value.split('/')[0]);
-      }
-  
-      if (value.endsWith('%')) {
-        // Rotten Tomatoes format e.g. "93%"
-        return parseFloat(value.replace('%', ''));
-      }
-  
+
+      if (/^\d+(\.\d+)?\/10$/.test(value)) return parseFloat(value.split('/')[0]);
+      if (/^\d+\/100$/.test(value)) return parseFloat(value.split('/')[0]) / 10;
+      if (value.endsWith('%')) return parseFloat(value.replace('%', '')) / 10;
+
       return 0;
     });
-  
-    if (normalizedRatings.length === 0) return 'N/A';
-  
-    const average =
-      normalizedRatings.reduce((sum, val) => sum + val, 0) / normalizedRatings.length;
-  
-    return `${average.toFixed(1)}%`;
+
+    const avg = normalizedRatings.reduce((a, b) => a + b, 0) / normalizedRatings.length;
+    return `${avg.toFixed(1)}/10`;
   };
 
   return (
     <DetailWrapper>
       <TopSection>
-        {omdbData?.Poster && (
-          <Poster
-            src={omdbData?.Poster}
-            alt={`${selectedMovie.title} Poster`}
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.onerror = null;
-              target.src = 'https://www.prokerala.com/movies/assets/img/no-poster-available.jpg';
-            }}
-          />
-        )}
+        <Poster
+          src={omdbData?.Poster || 'https://www.prokerala.com/movies/assets/img/no-poster-available.jpg'}
+          alt={`${selectedMovie.title} Poster`}
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.onerror = null;
+            target.src = 'https://www.prokerala.com/movies/assets/img/no-poster-available.jpg';
+          }}
+        />
+
         <MovieInfo>
-          <h2>{selectedMovie.title}</h2>
+          <h2>
+            Episode {selectedMovie.episode_id}: {selectedMovie.title}
+          </h2>
           <p><strong>Director:</strong> {selectedMovie.director}</p>
           <p><strong>Producer:</strong> {selectedMovie.producer}</p>
-          <p><strong>Opening Crawl:</strong> {selectedMovie.opening_crawl}</p>
+          <p><strong>Opening Crawl:</strong><br /> {selectedMovie.opening_crawl}</p>
         </MovieInfo>
       </TopSection>
 
-      {omdbData && (
+      {omdbData && omdbData.Ratings?.length > 0 && (
         <BottomSection>
-          {omdbData?.Ratings?.length > 0 && (
-            <>
-              <h4>Ratings:</h4>
-              <RatingList>
-                {omdbData.Ratings.map((r) => (
-                  <li key={r.Source}>{r.Source}: {r.Value}</li>
-                ))}
-              </RatingList>
-              <p><strong>Average Rating:</strong> {getAverageRating()}</p>
-            </>
-          )}
+          <h4>Ratings</h4>
+          <RatingList>
+            {omdbData.Ratings.map((r) => {
+              let normalized = 'N/A';
+              const value = r.Value.trim();
+              if (/^\d+(\.\d+)?\/10$/.test(value)) normalized = `${parseFloat(value.split('/')[0]).toFixed(1)}/10`;
+              if (/^\d+\/100$/.test(value)) normalized = `${(parseFloat(value.split('/')[0]) / 10).toFixed(1)}/10`;
+              if (value.endsWith('%')) normalized = `${(parseFloat(value.replace('%', '')) / 10).toFixed(1)}/10`;
+
+              return (
+                <li key={r.Source}>
+                  <span>{r.Source}:</span> ⭐ {normalized}
+                </li>
+              );
+            })}
+          </RatingList>
+          <p><strong>Average Rating:</strong> ⭐ {getAverageRating()}</p>
         </BottomSection>
       )}
     </DetailWrapper>
